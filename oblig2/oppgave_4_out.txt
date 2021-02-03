@@ -1,0 +1,16 @@
+Rottene til p1 er
+  -3.05230 + 0.00000i
+  -0.69766 + 0.49516i
+  -0.69766 - 0.49516i
+   1.00000 + 0.00000i
+   0.44762 + 0.00000i
+sdrot(p1) gir -3.052301 som rot
+
+
+Rotten til p2 er
+   0.35220 + 1.72143i
+   0.35220 - 1.72143i
+   1.29560 + 0.00000i
+ERROR: Fant ingen losning etter 100 iterasjoner
+
+sdrot(p2) gir 0.000000 som rot

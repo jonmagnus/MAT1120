@@ -1,0 +1,8 @@
+Egenverdiene til A er
+     0.0030044
+     0.0642943
+     0.4893388
+     2.0435738
+    15.5534733
+   332.8463154
+sdrot gir 332.846316 som storste egenverdi

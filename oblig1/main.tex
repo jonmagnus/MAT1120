@@ -1,0 +1,216 @@
+\documentclass{article}[norsk]
+\usepackage[utf8]{inputenc}
+\usepackage[norsk]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\title{MAT1120 - Oblig 1}
+\author{Jon-Magnus Rosenblad}
+\date{September 2018}
+
+\begin{document}
+
+\include{matlab_listing.tex}
+
+
+\maketitle
+
+\section*{Oppgave 1}
+\textit{Bruk Matlab til å regne $P^k$ for $k \in \{2,3,4,50,100\}$. Angi deretter sannsynligheten for at systemet går fra tilstand $s_4$ til tilstand $s_2$ i løpet av henholdsvis $2,3,4,50$ og $100$ tidsskritt.}\\
+
+Vi setter opp en enkel loop som går igjennom hver verdi av k:
+\lstinputlisting{oppgave_1.m}
+Programmet skriver ut:
+
+{\obeylines\obeyspaces
+\texttt{
+\input{oppgave_1_out.txt}
+}}
+
+\section*{Oppgave 2}
+\textit{Bestem en basis for $\text{\normalfont Nul}(P - I_5)$. Begrunn deretter at $P$ ikke er regulær. Kunne du ha konkludert med at $P$ ikke er regulær på grunnlag av beregningene du utførte i Oppgave 1}\\
+
+Vi skriver inn 
+\lstinputlisting{oppgave_2.m}
+i matlab og får at basisen for $\text{Nul} (P - I_5)$ er:
+\begin{equation*}
+	\left\{
+    	\begin{bmatrix}
+        	1\\0\\0\\0\\0
+        \end{bmatrix}
+        ,\,
+    	\begin{bmatrix}
+        	0\\0\\0\\0\\1
+        \end{bmatrix}
+\right\}
+\end{equation*}
+Vi ser at likevektsvektoren ikke er entydig (f.eks. begge i basen er mulige likevektsvektorer) så ved teorem 18 fra boka er ikke $P$ regulær.
+
+%Dette kunne vi også observert fra at ingen av potensene av $P$ fra oppgave 1 hadde bare strengt positive elementer, så ved definisjonen av regularitet er ikke $P$ regulær. Ved tolkningen av potensene av $P$ som sannsynligheten for overganger gjennom et visst antall steg gir dette mening, ettersom uansett hvor mange steg man tar kan man aldri komme fra tilstand $s_1$ til noen annen tilstand, og dermed vil også hele kolonne 1 være 0 utenom det øverste elementet som da alltid vil være 1.
+
+I oppgave 1 observerte vi for hver $k \in \{2,3,4,50,100\}$ fantes det et element i $P^k$ som ikke var strengt positivt, noe som intuitivt tyder på at ingen potens av $P$ har bare strengt positive elementer. Denne teorien støttes av tolkningen av $P^k$ som overgansmatrisen der hver overgang tar $k$ steg, ettersom vi ser at i $P$ er alle elementene i kolonne 1 null, bortsett fra $p_{11}$, dvs. det er umulig å bevege seg fra tilstand $s_1$ til noen annen tilstand, så da uavhengig av hvor mange steg du prøver å ta forblir det umulig å komme seg fra $s_1$ til noen annen tilstand, så den kolonnen forblir det samme for alle eksponenter.
+
+\section*{Oppgave 3}
+\begin{enumerate}[label=\alph*)]
+    \item \textit{Bestem klassene for systemet beskrevet i Eksempel 1. Angi hvilke klasser som er lukket, og hvilke tilstander som er absorberende.}\\
+    
+    Klassene for systemet er $\{s_1\}, \{s_2,s_3,s_4\},\{s_5\}$. Bare $\{s_1\}$ og $\{s_5\}$ er lukket, og $s_1$ og $s_5$ er absorberende tilstander.
+    \item \textit{Betrakt et system der overgangsmatrisen $P$ er regulær. Begrunn at det fins da bare én klasse, med andre ord at alle tilstander kommuniserer med hverandre.}\\
+    
+    Om en overgangsmatrise er regulær må det, fra definisjonen av en regulær matrise, finnes en potens av matrisen hvor alle elementene er strengt positive, dvs. gjennom et bestemt antall steg er det mulig å bevege seg fra en hvilken som helst tilstand til en hvilken som helst annen tilstand, dermed er alle tilstandene i den samme lukkede klassen.
+\end{enumerate}
+
+\section*{Oppgave 4}
+\textit{Betrakt igjen systemet beskrevet i Eksempel 1. Beregn $x_2^K$ og $x_3^K$ for hver av de lukkede klassene du fant i Oppgave 3 a).}\\
+
+Fra definisjonen av absorpsjonssansynligheten av en bestemt klasse ser vi
+\begin{equation*} \begin{aligned}
+	x_j^K&=\sum_{i=1}^{n}{p_{i j}\, x_i^K}\\
+    &=\text{col}_j(P)\cdot \vec{x}^K\\
+    &=\text{row}_j(P^T)\vec{x}^K
+\end{aligned} \end{equation*}
+hvor $P^T$ er den transponerte til $P$ og $\vec{x}^K = \left(x_1, x_2, \ldots, x_n\right)$. Denne skrivemåten stemmer med definisjonen om vi bare manipulerer svarvektoren slik at de trivielle absorpsjonssansynlighetene blir riktige. Regner vi for alle $x_i$ samtidig får vi
+\begin{align*}
+	\vec{x}^K = P^T \vec{x}^K
+\end{align*}
+For at dette skal oppfylles løser vi likningen $(P^T - I_n)\vec{x}^K = 0$. Vi får da en løsning med to frie variable, men om vi sertter $K = \{s_1\}$ har vi fra definisjonen at $x_1^K=1$, og vi kan observere at $x_5^K=0$ ($s_5$ er absorberende, så det er umulig å gå fra denne tilstanden til noen annen). Omvendt gjelder om vi setter $K = \{s_5\}$.
+
+Et matlab-program som løser dette er:
+\lstinputlisting{oppgave_4.m}
+Programmet skriver ut:
+{\obeylines\obeyspaces
+\texttt{
+\input{oppgave_4_out.txt}
+}}
+
+Vi ser at løsningene er:
+\begin{equation*} \begin{aligned}
+	x_2^{\{s_1\}}&=0.8909&x_3^{\{s_1\}}&=0.6364\\
+    x_2^{\{s_5\}}&=0.1091&x_3^{\{s_5\}}&=0.3636
+\end{aligned} \end{equation*}
+\section*{Oppgave 5}
+\begin{enumerate}[label=\alph*)]
+	\item \textit{Begrunn at $s_1$ er en absorberende tilstand. Finnes det andre absorberende tilstander?} 
+    
+    %$s_1$ er en absorberende tilstand ettersom alle verdiene i kolonne 1 utenom den første er 0, dvs. tilstanden kan ikke utvikle seg til noen andre tilstander utenom seg selv så $\{s_1\}$ er en lukket klasse. Det samme argumentet gjelder for $s_5$.
+    
+    Siden alle verdiene i kolonne 1 utenom det på diagonalen er 0 er det umulig å bevege seg fra tilstand $s_1$ til noen annen, så $\left\{s_1\right\}$ er en lukket klasse, og dermed er $s_1$ en absorberende tilstand. Samme argument gjelder for $s_5$.
+    \item \textit{Forklar ut fra} 
+    \begin{equation*} \begin{aligned}
+    x_j^K &= 1 &\text{for hver } s_j \in K\\
+    x_j^K &= \sum_{i=1}^np_{ij}\,x_i^K &\text{for hver } s_j \notin K
+    \end{aligned} \end{equation*}
+\textit{at vektoren $\vec{y}=\left(x_2,x_3,x_3\right)$ (som består av de "ikke-trivielle" absorpsjonssannsynlighetene) er en løsning av systemet $A\,\vec{y} = \vec{b}$  for en viss vektor $\vec{b} \in \mathbb{R}^3$ som du skal bestemme.}\\
+
+    Setter vi 
+    $\displaystyle P'=\begin{bmatrix}
+    	0	&p_3	&0\\
+        q_2	&0	&p_4\\
+        0	&q_3	&0
+    \end{bmatrix}$
+    , dvs. $P$ uten radene og kolonene for de trivielle absorpsjonssansynlighetene ser vi at $A=I_3 - P'$. Så $A \vec{y} = (I_ 3 - P') \vec{y} = \vec{b}$. Men dette kjenner vi igjen fra forrige oppgave. Eneste forskjell er at overgangen fra $s_2$ til $s_1$ ikke blir tatt hensyn til ($s_5$ kan vi ignorere siden $x_5^{\{s_1\}}=0$ uansett), men dette kan fikses ved å bare legge den til i summen. Vi får at
+\begin{equation*} \begin{aligned}
+	x_2^{\{s_1\}}&=p_{2} \, x_1^{\{s_1\}} + q_{2} \, x_3^{\{s_1\}}\\
+	x_3^{\{s_1\}}&=p_{3} \, x_2^{\{s_1\}} + q_{3} \, x_4^{\{s_1\}}\\
+	x_4^{\{s_1\}}&=p_{4} \, x_3^{\{s_1\}}
+\end{aligned} \end{equation*}
+så
+
+\begin{equation*}
+	\vec{y}=P'\vec{y} + \begin{bmatrix}
+    	p_{2} \, x_1^{\{s_1\}}\\
+        0\\
+        0
+    \end{bmatrix} = P'\vec{y} + \begin{bmatrix}
+    	p_{2}\\
+        0\\
+        0
+    \end{bmatrix}
+\end{equation*}
+ omformulerer vi får vi $\displaystyle \vec{y} - P'\vec{y} = (I_3 - P')\vec{y} = A\vec{y} = \begin{bmatrix}
+ 	p_2\\0\\0
+\end{bmatrix}$, så $\vec{b} = \begin{bmatrix}p_2\\0\\0 \end{bmatrix}$.
+	\item \textit{Begrunn at $A$ kan omformes ved hjelp av to elementære radoperasjoner til en øvre triangulær matrise. Forklar deretter hvorfor $A$ er invertibel. Hva kan du si om løsningen til systemet $A\,\vec{y}=\vec{b}$?}\\ 
+    
+    $A$ kan reduseres til øvre triangulær form ved først å legge til $p_3$ ganger rad 1 til rad 2, for så å legge til $\frac{p_4}{1 - q_2 \, p_3}$ av rad 2 til rad 3. Utregningen er som følger:
+\begin{equation*} \begin{aligned}
+A &=
+	\begin{bmatrix}
+    	1	&-q_2	&0\\
+       .p_3	&1	&-q_3\\
+        0	&-p_4	&1
+    \end{bmatrix}\\
+	&\sim
+	\begin{bmatrix}
+    	1	&-q_2	&0\\
+        0	&1-p_3 \, q_2	&-q_3\\
+       0	&-p_4	&1
+    \end{bmatrix}\\
+    &\sim
+	\begin{bmatrix}
+    	1	&-q_2	&0\\
+        0	&1-p_3 \, q_2	&-q_3\\
+        0	&0	&1 - \frac{p_4\,q_3}{1 - p_3 \, q_2}
+    \end{bmatrix}
+\end{aligned} \end{equation*}
+
+
+For at $A$ skal være invertibel trenger vi at hver kolonne er en pivot-kolonne, dvs. vi trenger at $1 - p_3 \, q_ 2 \neq 0$ og at $1 - \frac{p_4 \, q_3}{1 - p_3 \, q_2} \neq 0$. Begge disse ulikhetene kan bevises at holder ved et kontrapositivt bevis. Det første er enklest:
+
+\begin{equation*}
+\begin{aligned}
+	1 - p_3 \, q_2 &= 0\\
+    &\Downarrow\\
+   1& = p_3 \, q_2\\
+   &\Downarrow\quad\left(q_2 \neq 0\right)\\
+   p_3 &= \frac{1}{q_2}\\
+   &\Downarrow\quad\left(\text{Ved begrensningene satt}\right)\\
+   1 &> \frac{1}{q_2}\\
+   &\Downarrow\quad\left(q_2 > 0\right)\\
+   q_2 &> 1
+\end{aligned}
+\end{equation*}
+
+Vi har kommet til et ugyldig utsagn, ettersom vi har satt begrensningen om at $0 < q_2 < 1$, så det opprinnelige utsagned må da også være ugyldig, dvs. vi må ha $1 - p_3 \, q_2 \neq 0$. Så for å motbevise det neste utsagned:
+
+\begin{equation*} \begin{aligned}
+	1 - \frac{p_4 \, q_3}{1 - p_3 \, q_2} &= 0\\
+    &\Downarrow\\
+    1 - p_3 \, q_2 &= p_4 \, q_3\\
+  &= p_4 \, (1 - p_3)\\
+  &\Downarrow\\
+  p_4 &= \frac{1 - p_3 \, q_2}{1 - p_3}\\
+  &\Downarrow\\
+  \frac{1 - p_3 \, q_2}{1 - p_3} &< 1\\
+  &\Downarrow\\
+  1 - p_3 \, q_2 &< 1 - p_3\\
+  &\Downarrow\\
+  p_3 \, q_2 &> p_3\\
+  &\Downarrow\\
+  q_2 &> 1
+\end{aligned} \end{equation*}
+
+Dette stemmer ikke med begrensningene som er satt for verdiene i tabellen, nemlig at $0 < q_2 < 1$, så det opprinnelige utsagned må også være galt. Siden hver kolonne er en pivot-kolonne er $A$ invertibel, så likningen $A\,\vec{y}=\vec{b}$ har en entydig løsning, nemlig $\vec{y}=A^{-1}\vec{b}$.
+\newpage
+	\item \textit{Lag en Matlab-funksjon \texttt{Walk} som for en inputvektor $\left(p_2,p_3,p_4\right)$ gjør følgende}
+    \begin{itemize}
+\item \textit{sjekker at $0 < p_j < 1$ og beregner $q_j = 1 - p_j$ for $j = 2,3,4$,}
+\item \textit{setter opp matrisen $A$ og vektoren $\vec{b}$,}
+\item \textit{løser systemet $A\,\vec{y} = \vec{b}$ og returnerer vektoren $\vec{y}=\left(x_2,x_3,x_4\right)$.}
+    \end{itemize}
+    \textit{Kjør programmet med $\left(p_2,p_3,p_4\right)=\left(0.15,0.5,0.35\right)$ som inputvektor og rapporter løsningen $\left(x_2, x_3, x_4\right)$. Legg ved utskrift av koden.}\\
+
+    \lstinputlisting{oppgave_5.m}
+  \textbf\textbf{Output:}
+{\obeylines\obeyspaces
+\texttt{
+\input{oppgave_5_out.txt}
+}}
+    
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,184 @@
+\documentclass{article}[norsk]
+\usepackage[utf8]{inputenc}
+\usepackage[norsk]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\title{MAT1120 - Oblig 2}
+\author{Jon-Magnus Rosenblad}
+\date{October 2018}
+
+
+\include{matlab_listing.tex}
+
+\begin{document}
+
+\maketitle
+\section*{Oppgave 1}
+Anta polynomet $p$ er definert ved $p(t)=a_0+a_1\,t+t^2$. Definer matrisen $C$ ved
+\begin{equation*}
+C=\begin{bmatrix}
+	0&1\\
+    -a_0&-a_1
+\end{bmatrix}.
+\end{equation*}
+Det karakteristiske polynomet til $C$ kan kan utledes som 
+\begin{equation*} \begin{aligned}
+	\text{det}\left(C-t\,I\right) &= (-t)(-a_1-t)+a_0\\
+    &=a_0+a_1\,t+t^2\\
+    &=p(t)
+\end{aligned} \end{equation*}
+Anta så at $p(t)=a_0 + a_1\,t+a_2\,t^2+t^3$ og
+\begin{equation*}
+	C=\begin{bmatrix}
+    	0&1&0\\
+        0&0&1\\
+        -a_0&-a_1&-a_2
+	\end{bmatrix}.
+\end{equation*}
+Igjen kan vi utlede det karakteristiske polynomet:
+\begin{equation*} \begin{aligned}
+	\text{det}\left(C-t\,I\right)&=-t\,\text{det}\begin{bmatrix} 
+    	-t&1\\
+        -a_1&-a_2-t
+	\end{bmatrix} - \text{det}\begin{bmatrix} 
+    	0&1\\
+        -a_0&-a_2-t
+	\end{bmatrix}\\
+    &=(-t)\left((-t)(-a_2-t)+a_1\right) - a_0\\
+    &=(-t)(a_1 + a_2\,t+t^2)-a_0\\
+    &=-\left(a_0 + a_1\,t+a_2\,t^2+t^3\right)\\
+    &=-p(t)
+\end{aligned} \end{equation*}
+\section*{Oppgave 2}
+Likningen
+\begin{equation}\label{eq:opg2:1}
+	f'''(t)-2\,f''(t)-f'(t)+2\,f(t)=0
+\end{equation}
+kan skrives om til 
+\begin{equation}\label{eq:opg2:fddd}
+	f'''(t)=2\,f''(t)+f(t)-2\,f(t)
+\end{equation}
+Videre definerer vi 
+\begin{equation*}
+	C=\begin{bmatrix}
+    	0&1&0\\
+        0&0&1\\
+        -2&1&2
+	\end{bmatrix}
+\end{equation*}
+og $p(t)=2-t-2\,t^2+t^3$.
+\begin{enumerate}[label=(\textit{\roman*})]
+	\item Anta at $f(t)$ er en løsning for likning (\ref{eq:opg2:1}) og sett $\vec{x}=\left(f(t),f'(t),f''(t)\right)$. Vi ønsker å vise at $\vec{x}$ er en løsning av likningen
+    \begin{equation}\label{eq:opg2:2}
+    	\vec{x}'(t)=C\,\vec{x}(t)
+    \end{equation}
+Vi observerer at
+\begin{equation*} \begin{aligned}
+	\vec{x}'(t)&=\left(f'(t),f''(t),f'''(t)\right)\\
+    &=\left(f'(t),f''(t),2f''(t)+f(t)-2f(t)\right)\quad (\text{ved (\ref{eq:opg2:fddd})})\\
+    &=C\,\vec{x}(t)
+\end{aligned} \end{equation*}
+så $\vec{x}$ er en løsning av (\ref{eq:opg2:2}).
+	\item Vi antar $\vec{x}(t)=\left(x_1(t),x_2(t),x_3(t)\right)$ er en løsning av (\ref{eq:opg2:2}). Vider får vi fra (\ref{eq:opg2:2}) at  
+    \begin{equation*}
+    \begin{bmatrix} x_1'(t)\\x_2'(t)\\x_3'(t)\end{bmatrix}=\begin{bmatrix} x_2(t)\\x_3(t)\\2\,x_3(t)+x_2(t)-2\,x_1(t)\end{bmatrix}
+    \end{equation*}
+Substituerer vi for $f=x_1$ får vi $f'''(t)=2\,f''(t)+f'(t)-2\,f(t)$, så $f$ er en løsning for (\ref{eq:opg2:1}).    
+
+	\item
+    Vi ser at egenverdiene for $C$ er 2,1,-1 med henholdsvis $\displaystyle \begin{bmatrix} 1\\2\\4 \end{bmatrix},\begin{bmatrix} 1\\1\\1 \end{bmatrix},\begin{bmatrix} 1\\-1\\1 \end{bmatrix}$ som korresponderende egenvektorer. (Dette kommer vi fram til ved å prøve divisorer av konstantleddet i det karakteristiske polynomet for å se om det er en rot, for så å gjøre polynomdivisjon og løse annengradslikningen som framkommer. Vektorene kan utledes ved å velge $v_\lambda$ for hver av egenverdiene slik beskrevet i oppgave 3(\textit{i})). Vi får så at den generelle løsningen for (\ref{eq:opg2:2}) er 
+    \begin{equation*}
+    	\vec{x}(t)=c_1\,\begin{bmatrix} 1\\2\\4 \end{bmatrix}\,e^{2\,t}+c_2\,\begin{bmatrix}1\\1\\1\end{bmatrix}\,e^{t}+c_3\,\begin{bmatrix} 1\\-1\\1\end{bmatrix}\,e^{-t}
+    \end{equation*}
+    Ønsker vi å finne å løse med initialbetingelse $\vec{x}(0)=\begin{bmatrix}-1\\2\\2\end{bmatrix}$ tilsvarer det å finne $\vec{c} =\left(c_1,c_2,c_3\right)$ s.a. 
+    \begin{equation*}
+    	\begin{bmatrix}
+        	1&1&1\\
+            2&1&-1\\
+            4&1&1
+		\end{bmatrix}\,\vec{c}=\begin{bmatrix}-1\\2\\2\end{bmatrix}
+    \end{equation*}
+    Dette kan gjøres ved radreduksjon og gir at $\displaystyle\vec{c}=\left(1,-1,-1\right)$. 
+    \item %TODO: oppgaven følger direkte fra tidligere oppgaver
+    For å finne en $f$ som tilfredsstiller (\ref{eq:opg2:1}) følger det fra oppgave (\textit{i}) og (\textit{ii}) at denne $f$-en alltid vil være det første elementet av $\vec{x}$ for en $\vec{x}$ som tilfredsstiller (\ref{eq:opg2:2}). Dermed ser vi fra forrige oppgave at dette er akkurat de $f$-ene s.a. $f(t)=c_1\,e^{2\,t}+c_2\,e^t+c_3\,e^{-t}$. Om vi ønsker å tilfredstille initialbetingelsene at
+    \begin{equation*}\begin{aligned}
+    	f(0)&=-1\\
+        f'(0)&=2\\
+        f''(0)&=2
+    \end{aligned} \end{equation*}
+    følger det også fra forrige oppgave at $f(t)=-e^{2\,t}+2\,e^t+2\,e^{-t}$.
+\end{enumerate}
+
+\section*{Oppgave 3}
+La $p$ være polynomet gitt ved $p(t)=\sum_{i=0}^n{a_i\,t^i}$ og la $C$ være den korresponderende kompanion-matrisen. Vi antar at $\lambda$ er en reell rot for $p$, så $p(t)= 0$. Vi definerer $E_\lambda=\left\{\vec{x}\in\mathbb{R}^n\,\lvert\,C\,\vec{x}=\lambda\,\vec{x}\right\}$.
+\begin{enumerate}[label=(\textit{\roman*})]
+	\item La $\displaystyle\vec{v}_\lambda=\begin{bmatrix}1\\\lambda\\\lambda^2\\\vdots\\\lambda^{n-1}\end{bmatrix}$. Videre har vi 
+    \begin{equation*} \begin{aligned}
+    	C\,\lambda&=\left(\lambda,\lambda^2,\lambda^3,\ldots,\lambda^{n-1},\sum_{i=0}^{n-1}\left(-a_i\,\lambda^i\right)\right)\\
+        &=\left(\lambda,\lambda^2,\lambda^3,\ldots,\lambda^n-p(\lambda)\right)\\
+        &=\left(\lambda,\lambda^2,\lambda^3,\ldots,\lambda^n\right)\\
+        &=\lambda\,\vec{v}_\lambda
+    \end{aligned} \end{equation*}
+
+	så $\vec{v}_\lambda$ er en egenvektor for $C$.
+	
+    \item Tydelig har vi at $\text{Span}\left\{\vec{v}_\lambda\right\}\subseteq E_\lambda$ for alle multipler av en egenvektor er en egenvektor med samme korresponderende egenverdi. 
+    Videre ser vi at for at $\vec{x}\in E_\lambda$ må vi ha $C\,\vec{x}=\lambda\,\vec{x}$, mao.:
+    \begin{equation*} \begin{aligned}
+    	x_2&=\lambda\,x_1\\
+        x_3&=\lambda\,x_2\\
+        &\vdots\\
+        x_n&=\lambda\,x_{n-1}\\
+        -\sum_{i=1}^n \left(a_{i-1}\,x_i\right)&=\lambda x_n
+    \end{aligned} \end{equation*}
+    Setter vi $c=x_1$ kan vi utlede at for alle $1\leq i\leq n$ har vi $x_i=\lambda^{i-1}\,c$, så vi kan skrive om den siste likningen til
+    \begin{equation*} \begin{aligned}
+    	-\sum_{i=1}^n\left(a_{i-1}\,\lambda^{i-1}\,c\right)&=\lambda^{n}\,c\\
+        &\Downarrow\\
+        0&=c\,p(\lambda)
+    \end{aligned} \end{equation*}
+	Vi ser dermed at likningen er oppfylt for alle valg av $c$, men dette er akkurat mengden av vektorer slik at $\vec{v}=c\,\vec{v}_\lambda$, dvs. mengden $\text{Span}\left\{\vec{v}_\lambda\right\}$.  Dermed har vi både $E_\lambda \subseteq \text{Span}\left\{\vec{v}_\lambda\right\}$ og $\text{Span}\left\{\vec{v}_\lambda\right\}\subseteq E_\lambda$, så $E_\lambda=\text{Span}\left\{\vec{v}_\lambda\right\}$.
+    
+    \item Om $p$ har $n$ distinkte røtter har også $C$ de samme distinkte egenvektorer. Dermed er summen av dimensjonene til egenrommene $n$ og dermed er $C$ diagonaliserbar. Konverst om $C$ er diagonaliserbar vet vi at summen av dimensjonene til egenrommene er lik $n$, men fra forrige oppgave vet vi at dimensjonen til et vilkårlig egenrom er 1, så det må da være $n$ distinkte egenverdier, og dermed $n$ distinkte røtter av $p$. 
+    
+    Om vi har egenverdier $\lambda_1, \lambda_2,\ldots, \lambda_n$ og korresponderende egenvektorer $\vec{v}_1,\vec{v}_2,\ldots,\vec{v}_n$vil den invertible matrisen $P=\begin{bmatrix} \vec{v}_1&\vec{v}_2&\ldots&\vec{v}_n\end{bmatrix}$ diagonalisere $C$. Fra deloppgave (\textit{i}) ser vi at hver av disse egenvektorene kan skrives på formen $\displaystyle\vec{v}_i=\begin{bmatrix} 1\\\lambda_i\\\vdots\\\lambda_i^n\end{bmatrix}$, så $P$ kan kan skrives
+    \begin{equation*}
+    	P=\begin{bmatrix}
+        	1&1&\ldots&1\\
+            \lambda_1&\lambda_2&\ldots&\lambda_n\\
+            \vdots&\vdots&\ddots&\vdots\\
+            \lambda_1^n&\lambda_2^n&\ldots&\lambda_n^n
+		\end{bmatrix}
+    \end{equation*}
+    
+\end{enumerate}
+
+\section*{Oppgave 4}
+Kildekoden for \texttt{sdrot} er som følger:
+\lstinputlisting[language=Matlab, frame=single]{sdrot.m}
+Testprogrammet
+\lstinputlisting[language=Matlab, frame=single]{oppgave_4.m}
+gir følgende output:
+{\obeylines\obeyspaces
+\texttt{
+\input{oppgave_4_out.txt}
+}}
+
+
+Vi ser at \texttt{sdrot} fant den største roten for det første polynomet, men for det andre polynomet mislykkes den. Det kommer av at det ikke er noen strengt dominant rot ettersom begge de komplekse røttene har lik og størst modulus.
+
+\section*{Oppgave 5}
+Kjører vi testprogrammet
+\lstinputlisting[language=Matlab, frame=single]{oppgave_5.m}
+får vi som output
+{\obeylines\obeyspaces
+\texttt{\input{oppgave_5_out.txt}}}
+og vi ser at programmet fant den største egenvektoren til pascal-matrisen men høy presisjon.
+
+
+\end{document}
